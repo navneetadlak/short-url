@@ -25,9 +25,9 @@ const LinkRedirect = () => {
       } else {
         setLoading(false);
       }
-    };
+    }
     fetchLinkDoc();
-  }, []);
+  }, [shortCode]);
 
   if (loading)
     return (

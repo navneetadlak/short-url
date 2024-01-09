@@ -11,10 +11,11 @@ import {
 import Navbar from "./Navbar";
 import LinkCard from "./LinkCard";
 import ShortenURLModal from "./ShortenURLModal";
-import { firebaseApp, firestore, auth, usersCollection } from "../../firebase";
-import { collection, getDocs } from 'firebase/firestore';
+import { firebaseApp, firestore, auth, usersCollection, firebase } from "../../firebase";
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { nanoid } from "nanoid";
 import copy from "copy-to-clipboard";
+// import firebase from 'firebase/app';
 // import { usersCollection } from './firebase';
 
 
@@ -58,18 +59,20 @@ const Account = () => {
   );
 
   const handleCreateShortenLink = async (name, longURL) => {
+    // const createdAt = firebase.firestore.FieldValue.serverTimestamp();
     const link = {
       name,
       longURL:
         longURL.includes("http://") || longURL.includes("https://")
           ? longURL
           : `http://${longURL}`,
-      createdAt: firebaseApp.firestore.FieldValue.serverTimestamp(),
+      // createdAt,
       shortCode: nanoid(6),
       totalClicks: 0,
     };
 
-    const resp = await linksPathRef.add(link);
+    // const resp = await linksPathRef.add(link);
+    const resp = await addDoc(linksPathRef, link);
 
     setLinks((links) => [
       ...links,
