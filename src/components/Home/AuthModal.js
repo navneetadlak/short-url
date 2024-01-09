@@ -38,9 +38,9 @@ const AuthModal = ({ onClose }) => {
   //   setLoading(true);
   //   try {
   //     if (isSignIn) {
-  //       await getAuth.signInWithEmailAndPassword(form.email, form.password);
+  //       await auth.signInWithEmailAndPassword(form.email, form.password);
   //     } else {
-  //       await getAuth.createUserWithEmailAndPassword(form.email, form.password);
+  //       await auth.createUserWithEmailAndPassword(form.email, form.password);
   //     }
   //   } catch (err) {
   //     setError(err.message);
@@ -59,13 +59,12 @@ const AuthModal = ({ onClose }) => {
         await createUserWithEmailAndPassword(auth, form.email, form.password);
       }
     } catch (err) {
+      console.error("Authentication error:", err);
       setError(err.message);
       setLoading(false);
     }
   };
 
-
-// ...
 
 // const handleAuth = async () => {
 //   setLoading(true);
@@ -103,7 +102,7 @@ const AuthModal = ({ onClose }) => {
       </DialogTitle>
       <DialogContent>
         <TextField
-          autoComplete={false}
+          autoComplete="off"
           style={{ marginBottom: "24px" }}
           variant="filled"
           fullWidth
@@ -134,7 +133,7 @@ const AuthModal = ({ onClose }) => {
           mx={2}
         >
           <Typography onClick={() => setIsSignIn((o) => !o)}>
-            {isSignIn ? "Don't have an account?" : "Already have an account"}
+            {isSignIn ? <Button>Don't have an account?</Button> : <Button>Already have an account</Button> }
           </Typography>
           <Button
             disableElevation

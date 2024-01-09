@@ -27,9 +27,8 @@
 // export { firebase, firestore, auth, app };
 
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, connectFirestoreEmulator } from 'firebase/firestore';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-
+import { getFirestore, collection } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 // initializeApp.firestore.FieldValue.serverTimestamp
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -45,7 +44,6 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
-const usersCollection = collection(firestore, "users");
 
 // if (process.env.NODE_ENV === 'development') {
 //   connectFirestoreEmulator(firestore, 'localhost', 8080);
@@ -54,6 +52,7 @@ const usersCollection = collection(firestore, "users");
 // const serverTimestamp = getFirestore().FieldValue.serverTimestamp;
 
 export {
-  firebaseApp, firestore, auth, usersCollection
+  firebaseApp, firestore, auth
 };
 
+export const usersCollection = () => collection(firestore, "users");

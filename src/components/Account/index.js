@@ -11,9 +11,12 @@ import {
 import Navbar from "./Navbar";
 import LinkCard from "./LinkCard";
 import ShortenURLModal from "./ShortenURLModal";
-import { firebaseApp, firestore, auth } from "../../firebase";
+import { firebaseApp, firestore, auth, usersCollection } from "../../firebase";
+import { collection, getDocs } from 'firebase/firestore';
 import { nanoid } from "nanoid";
 import copy from "copy-to-clipboard";
+// import { usersCollection } from './firebase';
+
 
 // const dummyData = [
 //   {
@@ -50,7 +53,7 @@ const Account = () => {
   const [links, setLinks] = useState([]);
   const userUid = auth.currentUser.uid;
   const linksPathRef = useMemo(
-    () => firestore.collection("users").doc(userUid).collection("links"),
+    () => usersCollection(firestore, "users", userUid, "links"), //firestore.collection("users").doc(userUid).collection("links"),
     [userUid]
   );
 
@@ -73,24 +76,32 @@ const Account = () => {
       { ...link, createdAt: new Date(), id: resp.id },
     ]);
     setOpenModal(false);
-  };
+  };   
+
+  // const linksPathRef = collection(firestore, 'links');
 
   useEffect(() => {
     const fetchLinks = async () => {
-      const snapshot = await linksPathRef.get();
-
-      const tempLinks = [];
-      snapshot.forEach((doc) =>
-        tempLinks.push({
-          ...doc.data(),
-          id: doc.id,
-          createdAt: doc.data().createdAt.toDate(),
-        })
-      );
-      setLinks(tempLinks);
-      setFetchingLinks(false);
+      try {
+        const snapshot = await getDocs(linksPathRef);
+  
+        const tempLinks = [];
+        snapshot.forEach((doc) => {
+          tempLinks.push({
+            ...doc.data(),
+            id: doc.id,
+            createdAt: doc.data().createdAt.toDate(),
+          });
+        });
+  
+        setLinks(tempLinks);
+        setFetchingLinks(false);
+      } catch (error) {
+        console.error('Error fetching links:', error);
+        // Handle the error appropriately, e.g., set an error state
+      }
     };
-
+  
     fetchLinks();
   }, [linksPathRef]);
 
