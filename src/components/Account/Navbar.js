@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <AppBar elevation={0} color="secondary" position="static">
       <Toolbar>
-        <Typography variant="h6">Smoul</Typography>
+        <Typography variant="h6">URL Shortner</Typography>
         <Box ml="auto">
           <Button color="inherit">Links</Button>
           <Button onClick={() => auth.signOut()} color="inherit">

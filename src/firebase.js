@@ -44,15 +44,26 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
-
+// const usersCollection = collection(firestore, "users");
+const usersCollection = (...collectionPath) => {
+  return collection(firestore, "users", ...collectionPath);
+};
 // if (process.env.NODE_ENV === 'development') {
 //   connectFirestoreEmulator(firestore, 'localhost', 8080);
 //   connectAuthEmulator(auth, 'http://localhost:4000');
 // }
 // const serverTimestamp = getFirestore().FieldValue.serverTimestamp;
 
-export {
-  firebaseApp, firestore, auth
+// Create a firebase object to export
+const firebase = {
+  app: firebaseApp,
+  firestore: firestore,
+  auth: auth,
+  usersCollection: usersCollection,
 };
 
-export const usersCollection = () => collection(firestore, "users");
+export {
+  firebaseApp, firestore, auth, usersCollection, firebase
+};
+
+

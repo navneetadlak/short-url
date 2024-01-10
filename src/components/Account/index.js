@@ -15,6 +15,9 @@ import { firebaseApp, firestore, auth, usersCollection, firebase } from "../../f
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { nanoid } from "nanoid";
 import copy from "copy-to-clipboard";
+
+import { serverTimestamp } from 'firebase/firestore';
+
 // import firebase from 'firebase/app';
 // import { usersCollection } from './firebase';
 
@@ -54,32 +57,32 @@ const Account = () => {
   const [links, setLinks] = useState([]);
   const userUid = auth.currentUser.uid;
   const linksPathRef = useMemo(
-    () => usersCollection(firestore, "users", userUid, "links"), //firestore.collection("users").doc(userUid).collection("links"),
+    () => usersCollection(userUid, "links"), //firestore.collection("users").doc(userUid).collection("links"),
     [userUid]
   );
 
   const handleCreateShortenLink = async (name, longURL) => {
-    // const createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    const createdAt = serverTimestamp();
     const link = {
       name,
       longURL:
         longURL.includes("http://") || longURL.includes("https://")
           ? longURL
           : `http://${longURL}`,
-      // createdAt,
+      createdAt,
       shortCode: nanoid(6),
       totalClicks: 0,
     };
-
+  
     // const resp = await linksPathRef.add(link);
     const resp = await addDoc(linksPathRef, link);
-
+  
     setLinks((links) => [
       ...links,
       { ...link, createdAt: new Date(), id: resp.id },
     ]);
     setOpenModal(false);
-  };   
+  };
 
   // const linksPathRef = collection(firestore, 'links');
 
@@ -87,7 +90,6 @@ const Account = () => {
     const fetchLinks = async () => {
       try {
         const snapshot = await getDocs(linksPathRef);
-  
         const tempLinks = [];
         snapshot.forEach((doc) => {
           tempLinks.push({
