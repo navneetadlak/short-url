@@ -42,11 +42,11 @@ const App = () => {
     //   </Switch>
     // </ThemeProvider>
     <ThemeProvider theme={theme}>
-      <Routes> {/* Changed Switch to Routes */}
+      <Routes>
         <Route path="/" element={user ? <Navigate to="/account" /> : <Home />} />
         <Route path="/account" element={user ? <Account /> : <Navigate to="/" />} />
         <Route path="/:shortCode" element={<LinkRedirect />} />
-      </Routes> {/* Changed Switch to Routes */}
+      </Routes>
     </ThemeProvider>
   );
 };

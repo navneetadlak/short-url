@@ -15,40 +15,8 @@ import { firebaseApp, firestore, auth, usersCollection, firebase } from "../../f
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 import { nanoid } from "nanoid";
 import copy from "copy-to-clipboard";
-
 import { serverTimestamp } from 'firebase/firestore';
 
-// import firebase from 'firebase/app';
-// import { usersCollection } from './firebase';
-
-
-// const dummyData = [
-//   {
-//     id: "31r08ms0fam",
-//     createdAt: new Date(),
-//     name: "My website",
-//     longURL: "https://google.com",
-//     shortCode: "masdo",
-//     totalClicks: 313,
-//   },
-//   {
-//     id: "31r08asdasfam",
-//     createdAt: new Date(),
-//     name: "E-book",
-//     longURL: "https://drive.google.com/asdokasnd89",
-//     shortCode: "182as",
-//     totalClicks: 32,
-//   },
-//   {
-//     id: "asdasdas",
-//     createdAt: new Date(),
-//     name: "E-book",
-//     longURL: "https://drive.google.com/asdokasnd89",
-//     shortCode: "182as",
-//     totalClicks: 32,
-//     cool: ["1,2,3"],
-//   },
-// ];
 
 const Account = () => {
   const [fetchingLinks, setFetchingLinks] = useState(true);
@@ -57,7 +25,7 @@ const Account = () => {
   const [links, setLinks] = useState([]);
   const userUid = auth.currentUser.uid;
   const linksPathRef = useMemo(
-    () => usersCollection(userUid, "links"), //firestore.collection("users").doc(userUid).collection("links"),
+    () => usersCollection(userUid, "links"), 
     [userUid]
   );
 
@@ -74,7 +42,6 @@ const Account = () => {
       totalClicks: 0,
     };
   
-    // const resp = await linksPathRef.add(link);
     const resp = await addDoc(linksPathRef, link);
   
     setLinks((links) => [
@@ -84,7 +51,6 @@ const Account = () => {
     setOpenModal(false);
   };
 
-  // const linksPathRef = collection(firestore, 'links');
 
   useEffect(() => {
     const fetchLinks = async () => {
